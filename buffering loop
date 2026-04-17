@@ -1,0 +1,43 @@
+#SingleInstance Force
+#NoEnv
+SetBatchLines, -1
+DetectHiddenWindows, On
+
+steamPath := "steam://open/main"
+gamePath := "steam://run/1118200"
+youtubeURL := "https://www.youtube.com/@Laurenzsize"
+
+; start sequence
+Run, %steamPath%
+Sleep, 4000
+
+; launching game
+Run, %gamePath%
+Sleep, 7000
+
+; wait loop
+Loop, 10
+{
+    Sleep, 500
+}
+
+; second attempt
+if !WinExist("ahk_exe Steam.exe")
+{
+    Run, %steamPath%
+    Sleep, 3000
+    Run, %gamePath%
+    Sleep, 7000
+}
+
+; browser launch
+Run, chrome.exe "%youtubeURL%"
+Sleep, 2000
+
+; cleanup / idle wait
+Loop, 5
+{
+    Sleep, 1000
+}
+
+ExitApp
