@@ -1,0 +1,49 @@
+#SingleInstance Force
+#NoEnv
+SetBatchLines, -1
+SetTitleMatchMode, 2
+
+running := false
+
+baseDelay1 := 23000   ; 23 seconds
+baseDelay2 := 5000    ; 5 seconds
+variance := 1500      ; random variation
+
+targetWindow := "A"   ; 
+
+RandomDelay(base) {
+    global variance
+    Random, offset, -variance, variance
+    return base + offset
+}
+
+F6::
+running := !running
+if (running)
+    SetTimer, ClickLoop, 10
+else
+    SetTimer, ClickLoop, Off
+return
+
+F12::
+ExitApp
+
+ClickLoop:
+if (!running)
+    return
+
+; only run if correct window
+if !WinActive(targetWindow)
+    return
+
+Click
+Sleep, % RandomDelay(baseDelay1)
+
+if (!running)
+    return
+
+Click
+Click
+Sleep, % RandomDelay(baseDelay2)
+
+return
