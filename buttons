@@ -1,0 +1,67 @@
+#SingleInstance Force
+#NoEnv
+SetBatchLines, -1
+SetTitleMatchMode, 2
+
+running := false
+mode := 1
+
+delayMin := 300
+delayMax := 700
+
+profile1 := ["1","2","3","4","5","6","7","8","9","0","m","j","r","j","f","r","u","3"]
+profile2 := ["q","w","e","r","t","y","u","i","o","p"]
+profile3 := ["a","s","d","f","g","h","j","k","l"]
+
+GetKeys() {
+    global mode, profile1, profile2, profile3
+    if (mode = 1)
+        return profile1
+    else if (mode = 2)
+        return profile2
+    else
+        return profile3
+}
+
+RandomDelay() {
+    global delayMin, delayMax
+    Random, t, %delayMin%, %delayMax%
+    return t
+}
+
+F6::
+running := !running
+if (running)
+    SetTimer, MainLoop, 10
+else
+    SetTimer, MainLoop, Off
+return
+
+F7::
+mode++
+if (mode > 3)
+    mode := 1
+return
+
+F12::
+ExitApp
+
+MainLoop:
+if (!running)
+    return
+
+; only run if window exists
+if !WinActive("A")
+    return
+
+keys := GetKeys()
+
+for index, key in keys
+{
+    if (!running)
+        break
+
+    SendInput, %key%
+    Sleep, % RandomDelay()
+}
+return
