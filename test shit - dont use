@@ -1,0 +1,55 @@
+#SingleInstance Force
+#NoEnv
+SetBatchLines, -1
+
+RUNNING := false
+DELAY := 5000
+WEBSITE := "https://www.google.com"
+
+Run, chrome.exe "%WEBSITE%"
+
+MsgBox, 64, Macro,
+(
+F6 = Start/Stop
+F12 = Exit
+
+Works ONLY when Chrome is active.
+If not, it will switch you to Chrome.
+)
+
+F6::
+RUNNING := !RUNNING
+Tooltip, % RUNNING ? "Running" : "Stopped", 10, 10
+Return
+
+F12::
+ExitApp
+
+Loop:
+while (RUNNING)
+{
+    if WinActive("ahk_exe chrome.exe")
+    {
+        Send, h
+        Sleep, %DELAY%
+
+        if (!RUNNING)
+            break
+
+        Send, w
+        Sleep, %DELAY%
+
+        if (!RUNNING)
+            break
+
+        Send, 9
+        Sleep, %DELAY%
+    }
+    else
+    {
+        Tooltip, Switching to Chrome..., 10, 10
+        WinActivate, ahk_exe chrome.exe
+        Sleep, 1000
+    }
+}
+Return
