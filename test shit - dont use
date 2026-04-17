@@ -52,4 +52,4 @@ while (RUNNING)
         Sleep, 1000
     }
 }
-Return
+return
