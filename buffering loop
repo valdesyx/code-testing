@@ -7,11 +7,31 @@ steamPath := "steam://open/main"
 gamePath := "steam://run/1118200"
 youtubeURL := "https://www.youtube.com/@Laurenzsize"
 
+; startup splash
+MsgBox, 4, Launcher, 
+(
+	Starting launcher...
+	
+	This will launch:
+	- Steam
+	- Game
+	- Browser
+	
+	Continue?
+)
+
+IfMsgBox No
+{
+    ExitApp
+}
+
 ; start sequence
+TrayTip, Launcher, Starting Steam..., 10
 Run, %steamPath%
 Sleep, 4000
 
 ; launching game
+TrayTip, Launcher, Launching game..., 10
 Run, %gamePath%
 Sleep, 7000
 
@@ -24,6 +44,7 @@ Loop, 10
 ; second attempt
 if !WinExist("ahk_exe Steam.exe")
 {
+    TrayTip, Launcher, Steam not detected. Retrying..., 10
     Run, %steamPath%
     Sleep, 3000
     Run, %gamePath%
@@ -31,6 +52,7 @@ if !WinExist("ahk_exe Steam.exe")
 }
 
 ; browser launch
+TrayTip, Launcher, Opening browser..., 10
 Run, chrome.exe "%youtubeURL%"
 Sleep, 2000
 
@@ -40,4 +62,12 @@ Loop, 5
     Sleep, 1000
 }
 
+TrayTip, Launcher, Done, 2
 ExitApp
+
+; ESC hotkey to abort
+Esc::
+MsgBox, 4, Abort, Are you sure?
+IfMsgBox Yes
+    ExitApp
+return
