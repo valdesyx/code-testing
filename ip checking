@@ -1,0 +1,57 @@
+import requests
+import time
+import os
+import subprocess
+
+def get_ip():
+    try:
+        return requests.get("https://api.ipify.org", timeout=5).text
+    except:
+        return "offline"
+
+def vpn_detected():
+    tasks = os.popen("tasklist").read().lower()
+    return ("openvpn" in tasks) or ("wireguard" in tasks)
+
+def launch_vpn_menu():
+    print("\nVPN Options:")
+    print("1. Open VPN App (OpenVPN GUI)")
+    print("2. Open WireGuard")
+    print("3. Do nothing")
+
+    choice = input("> ")
+
+    if choice == "1":
+        subprocess.Popen("C:\\Program Files\\OpenVPN\\bin\\openvpn-gui.exe")
+    elif choice == "2":
+        subprocess.Popen("wireguard")
+
+def main():
+    print("VPN Assistant Running...\n")
+
+    last_ip = None
+
+    while True:
+        ip = get_ip()
+        active = vpn_detected()
+
+        print("Current IP:", ip)
+        print("VPN Active:", active)
+
+        if ip != last_ip:
+            print("→ IP change detected")
+            last_ip = ip
+
+        print("\nPress M for menu, or wait...")
+
+        start = time.time()
+
+        while time.time() - start < 5:
+            if input().lower() == "m":
+                launch_vpn_menu()
+                break
+
+        time.sleep(1)
+
+if __name__ == "__main__":
+    main()
