@@ -19,7 +19,7 @@ If not, it will switch you to Chrome.
 
 F6::
 RUNNING := !RUNNING
-Tooltip, % RUNNING ? "Running" : "Stopped", 10, 10
+Tooltip, % RUNNING ? "running" : "stopped", 10, 10
 Return
 
 F12::
